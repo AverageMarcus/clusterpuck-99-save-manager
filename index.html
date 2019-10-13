@@ -37,30 +37,30 @@
           <h2>Users</h2>
           <div class="flex">
             <div v-for="user in users" :id="user.name" class="card user">
-              <h3>{{user.name}}</h3>
+              <h3><input type="text" v-model="user.name" /></h3>
               <div class="row">
                 <dt class="column column-50">Wins: </dt>
-                <dd class="column column-50">{{user.wins}}</dd>
+                <dd class="column column-50"><input type="number" min="0" v-model="user.wins" /></dd>
               </div>
               <div class="row">
                 <dt class="column column-50">Losses: </dt>
-                <dd class="column column-50">{{user.losses}}</dd>
+                <dd class="column column-50"><input type="number" min="0" v-model="user.losses" /></dd>
               </div>
               <div class="row">
                 <dt class="column column-50">Goals: </dt>
-                <dd class="column column-50">{{user.goals}}</dd>
+                <dd class="column column-50"><input type="number" min="0" v-model="user.goals" /></dd>
               </div>
               <div class="row">
                 <dt class="column column-50">Oopsies: </dt>
-                <dd class="column column-50">{{user.oopsies}}</dd>
+                <dd class="column column-50"><input type="number" min="0" v-model="user.oopsies" /></dd>
               </div>
               <div class="row">
                 <dt class="column column-50">Checks: </dt>
-                <dd class="column column-50">{{user.checks}}</dd>
+                <dd class="column column-50"><input type="number" min="0" v-model="user.checks" /></dd>
               </div>
               <div class="row">
                 <dt class="column column-50">Deaths: </dt>
-                <dd class="column column-50">{{user.deaths}}</dd>
+                <dd class="column column-50"><input type="number" min="0" v-model="user.deaths" /></dd>
               </div>
               <div class="row">
                 <dt class="column column-50">Hold Time: </dt>
