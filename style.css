@@ -31,6 +31,10 @@ ul.inline-list li {
   min-width: 250px;
 }
 
+.user input {
+  margin: 0;
+}
+
 .level {
   min-width: 300px;
 }

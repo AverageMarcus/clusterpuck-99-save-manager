@@ -81,7 +81,7 @@ const vm = new Vue({
       });
 
       this.saveFile.items.find(obj => obj._key === "UserAccounts")._value = this.users.map(user => {
-          const raw = [user.name, user.unknown, user.wins, user.losses, user.goals, user.oopsies, user.checks, user.deaths, user.holdTime, ...user._raw.split(',').slice(9)].join(',')
+          const raw = [user.name.toUpperCase(), user.unknown, user.wins, user.losses, user.goals, user.oopsies, user.checks, user.deaths, user.holdTime, ...user._raw.split(',').slice(9)].join(',')
           return raw;
         })
         .join(';')
