@@ -42,6 +42,7 @@ const vm = new Vue({
         .map(user => {
           const parts = user.split(',');
           const name = parts[0];
+          const unknown = parts[1]
           const wins = parts[2];
           const losses = parts[3];
           const goals = parts[4];
@@ -49,7 +50,7 @@ const vm = new Vue({
           const checks = parts[6];
           const deaths = parts[7];
           const holdTime = parts[8];
-          return { name, wins, losses, goals, oopsies, checks, deaths, holdTime, _raw: user };
+          return { name, unknown, wins, losses, goals, oopsies, checks, deaths, holdTime, _raw: user };
         });
 
       // Custom Levels
@@ -62,14 +63,44 @@ const vm = new Vue({
           const plays = parts[3];
           const minPlayers = parts[4];
           const maxPlayers = parts[5];
+          const levelID = parts[6];
           const difficulty = parts[7];
-          return { name, tagline, plays, minPlayers, maxPlayers, difficulty, _raw: level };
+          const includeInList = parts[8];
+          const levelData = parts.slice(9);
+          return { name, tagline, plays, minPlayers, maxPlayers, levelID, difficulty, includeInList, levelData };
         })
     },
     holdTime(time) {
       const minutes = Math.floor(time / 60);
       const seconds = Math.floor(time - minutes * 60);
       return `${minutes}min ${seconds}sec`;
+    },
+    download() {
+      this.colors.forEach(color => {
+        this.saveFile.items.find(obj => obj._key === color._raw._key)._value = color.unlocked ? '1' : '0';
+      });
+
+      this.saveFile.items.find(obj => obj._key === "UserAccounts")._value = this.users.map(user => {
+          const raw = [user.name, user.unknown, user.wins, user.losses, user.goals, user.oopsies, user.checks, user.deaths, user.holdTime, ...user._raw.split(',').slice(9)].join(',')
+          return raw;
+        })
+        .join(';')
+
+      this.customLevels.map(level => {
+        return {
+          key: 'CustomLevel' + level.levelID,
+          raw: ['70', level.name, level.tagline, level.plays, level.minPlayers, level.maxPlayers, level.levelID, level.difficulty, level.includeInList, ...level.levelData].join(';')
+        }
+      }).forEach(level => {
+        this.saveFile.items.find(obj => obj._key === level.key)._value = level.raw;
+      });
+
+      const element = document.createElement('a');
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(this.saveFile)));
+      element.setAttribute('download', 'Clusterpuck99Save');
+      const e = document.createEvent('MouseEvents');
+      e.initEvent('click', true, true);
+      element.dispatchEvent(e);
     }
   }
 });

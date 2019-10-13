@@ -22,6 +22,8 @@
         <label>Upload Save File: <input type="file" id="saveFile" @change="handleFileChange($event)"></label>
       </div>
 
+      <button v-show="saveFile.items" class="download" @click="download">Download Save File</button>
+
       <main v-show="saveFile.items">
         <div>
           <h2>Colours Unlocked</h2>
