@@ -71,6 +71,7 @@
         </div>
         <div>
           <h2>Custom Levels</h2>
+          <label>Import level: <input type="file" id="importLevelFile" @change="handleLevelImport($event)"></label>
           <div class="flex">
             <div v-for="level in customLevels" :id="level.name" class="card level">
               <h2>{{level.name}}</h2>
@@ -88,6 +89,8 @@
                 <dt class="column column-50">Players: </dt>
                 <dd class="column column-50">{{level.minPlayers}}-{{level.maxPlayers}}</dd>
               </div>
+
+              <button @click="exportLevel(level.levelID)">Export</button>
             </div>
           </div>
         </div>

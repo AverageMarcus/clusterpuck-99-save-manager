@@ -25,6 +25,34 @@ const vm = new Vue({
         reader.readAsText(file, 'UTF-8');
       }
     },
+    handleLevelImport(evt) {
+      const file = evt.target.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+
+        reader.onload = evt => {
+          const level = evt.target.result;
+          const parts = level.split(';')
+          const name = parts[1];
+          const tagline = parts[2];
+          const plays = parts[3];
+          const minPlayers = parts[4];
+          const maxPlayers = parts[5];
+          const levelID = this.customLevels.length; // Make sure we don't clash
+          const difficulty = parts[7];
+          const includeInList = parts[8];
+          const levelData = parts.slice(9);
+          const toRaw = function() {
+            const level = this;
+            return ['70', level.name, level.tagline, level.plays, level.minPlayers, level.maxPlayers, level.levelID, level.difficulty, level.includeInList, ...level.levelData].join(';')
+          }
+          this.customLevels.push({ name, tagline, plays, minPlayers, maxPlayers, levelID, difficulty, includeInList, levelData, toRaw });
+        };
+
+        reader.readAsText(file, 'UTF-8');
+      }
+    },
     parseSaveFile() {
       // Colors
       this.colors = this.saveFile.items
@@ -50,7 +78,11 @@ const vm = new Vue({
           const checks = parts[6];
           const deaths = parts[7];
           const holdTime = parts[8];
-          return { name, unknown, wins, losses, goals, oopsies, checks, deaths, holdTime, _raw: user };
+          const toRaw = function() {
+            const user = this;
+            return [user.name.toUpperCase(), user.unknown, user.wins, user.losses, user.goals, user.oopsies, user.checks, user.deaths, user.holdTime, ...user._raw.split(',').slice(9)].join(',');
+          }
+          return { name, unknown, wins, losses, goals, oopsies, checks, deaths, holdTime, toRaw, _raw: user };
         });
 
       // Custom Levels
@@ -67,7 +99,11 @@ const vm = new Vue({
           const difficulty = parts[7];
           const includeInList = parts[8];
           const levelData = parts.slice(9);
-          return { name, tagline, plays, minPlayers, maxPlayers, levelID, difficulty, includeInList, levelData };
+          const toRaw = function() {
+            const level = this;
+            return ['70', level.name, level.tagline, level.plays, level.minPlayers, level.maxPlayers, level.levelID, level.difficulty, level.includeInList, ...level.levelData].join(';')
+          }
+          return { name, tagline, plays, minPlayers, maxPlayers, levelID, difficulty, includeInList, levelData, toRaw };
         })
     },
     holdTime(time) {
@@ -80,27 +116,28 @@ const vm = new Vue({
         this.saveFile.items.find(obj => obj._key === color._raw._key)._value = color.unlocked ? '1' : '0';
       });
 
-      this.saveFile.items.find(obj => obj._key === "UserAccounts")._value = this.users.map(user => {
-          const raw = [user.name.toUpperCase(), user.unknown, user.wins, user.losses, user.goals, user.oopsies, user.checks, user.deaths, user.holdTime, ...user._raw.split(',').slice(9)].join(',')
-          return raw;
-        })
-        .join(';')
+      this.saveFile.items.find(obj => obj._key === "UserAccounts")._value = this.users.map(user => user.toRaw()).join(';')
 
-      this.customLevels.map(level => {
-        return {
-          key: 'CustomLevel' + level.levelID,
-          raw: ['70', level.name, level.tagline, level.plays, level.minPlayers, level.maxPlayers, level.levelID, level.difficulty, level.includeInList, ...level.levelData].join(';')
-        }
-      }).forEach(level => {
-        this.saveFile.items.find(obj => obj._key === level.key)._value = level.raw;
+      this.customLevels.forEach(level => {
+        this.saveFile.items.find(obj => obj._key === 'CustomLevel' + level.levelID)._value = level.toRaw();
       });
 
-      const element = document.createElement('a');
-      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(this.saveFile)));
-      element.setAttribute('download', 'Clusterpuck99Save');
-      const e = document.createEvent('MouseEvents');
-      e.initEvent('click', true, true);
-      element.dispatchEvent(e);
+      downloadFile('Clusterpuck99Save', JSON.stringify(this.saveFile));
+    },
+    exportLevel(levelID) {
+      const level = this.customLevels.find(level => level.levelID === levelID);
+      if (level) {
+        downloadFile(level.name, level.toRaw());
+      }
     }
   }
 });
+
+function downloadFile(filename, contents) {
+  const element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(contents));
+  element.setAttribute('download', filename);
+  const e = document.createEvent('MouseEvents');
+  e.initEvent('click', true, true);
+  element.dispatchEvent(e);
+}
