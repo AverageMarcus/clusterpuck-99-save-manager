@@ -38,3 +38,10 @@ ul.inline-list li {
 dt, dd {
   display: inline-block;
 }
+
+
+.download {
+  position: fixed;
+  bottom: 8px;
+  right: 8px;
+}
