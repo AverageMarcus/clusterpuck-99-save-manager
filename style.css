@@ -1,0 +1,40 @@
+ul.inline-list {
+  margin-bottom: 0;
+}
+
+ul.inline-list li {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.pill {
+  border: 1px solid black;
+  border-radius: 100px;
+  padding: 0 7px;
+}
+
+.flex {
+  display: flex;
+  max-width: 100%;
+  flex-wrap: wrap;
+}
+
+.card {
+  border: 2px solid #00000042;
+  margin: 5px;
+  padding: 4px;
+  box-shadow: 2px 2px 2px #00000042;
+  border-radius: 4px;
+}
+
+.user {
+  min-width: 250px;
+}
+
+.level {
+  min-width: 300px;
+}
+
+dt, dd {
+  display: inline-block;
+}
