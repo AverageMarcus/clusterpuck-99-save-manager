@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>ClusterPuck 99 Save Manager</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <script src="https://unpkg.com/vue@2.5.17/dist/vue.min.js"></script> -->
+    <script src="https://unpkg.com/vue@2.5.17/dist/vue.js"></script>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.css">
+
+    <link rel="stylesheet" href="style.css"/>
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <div id="app" class="container">
+      <h1>ClusterPuck 99 Save Manager</h1>
+      <div>
+        <label>Upload Save File: <input type="file" id="saveFile" @change="handleFileChange($event)"></label>
+      </div>
+
+      <main v-show="saveFile.items">
+        <div>
+          <h2>Colours Unlocked</h2>
+          <ul class="inline-list">
+            <li v-for="color in colors" :id="color.name">
+              <label><input type="checkbox" v-model="color.unlocked" /> {{color.name}}</label>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h2>Users</h2>
+          <div class="flex">
+            <div v-for="user in users" :id="user.name" class="card user">
+              <h3>{{user.name}}</h3>
+              <div class="row">
+                <dt class="column column-50">Wins: </dt>
+                <dd class="column column-50">{{user.wins}}</dd>
+              </div>
+              <div class="row">
+                <dt class="column column-50">Losses: </dt>
+                <dd class="column column-50">{{user.losses}}</dd>
+              </div>
+              <div class="row">
+                <dt class="column column-50">Goals: </dt>
+                <dd class="column column-50">{{user.goals}}</dd>
+              </div>
+              <div class="row">
+                <dt class="column column-50">Oopsies: </dt>
+                <dd class="column column-50">{{user.oopsies}}</dd>
+              </div>
+              <div class="row">
+                <dt class="column column-50">Checks: </dt>
+                <dd class="column column-50">{{user.checks}}</dd>
+              </div>
+              <div class="row">
+                <dt class="column column-50">Deaths: </dt>
+                <dd class="column column-50">{{user.deaths}}</dd>
+              </div>
+              <div class="row">
+                <dt class="column column-50">Hold Time: </dt>
+                <dd class="column column-50">{{holdTime(user.holdTime)}}</dd>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- <ul class="inline-list">
+            <li v-for="user in users" :id="user.name" class="pill">{{ user.name }}</li>
+          </ul> -->
+        </div>
+        <div>
+          <h2>Custom Levels</h2>
+          <div class="flex">
+            <div v-for="level in customLevels" :id="level.name" class="card level">
+              <h2>{{level.name}}</h2>
+              <blockquote>{{level.tagline}}</blockquote>
+
+              <div class="row">
+                <dt class="column column-50">No. of Plays: </dt>
+                <dd class="column column-50">{{level.plays}}</dd>
+              </div>
+              <div class="row">
+                <dt class="column column-50">Difficulty: </dt>
+                <dd class="column column-50">{{level.difficulty}} stars</dd>
+              </div>
+              <div class="row">
+                <dt class="column column-50">Players: </dt>
+                <dd class="column column-50">{{level.minPlayers}}-{{level.maxPlayers}}</dd>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
