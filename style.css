@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 ul.inline-list {
   margin-bottom: 0;
 }
@@ -48,4 +52,32 @@ dt, dd {
   position: fixed;
   bottom: 8px;
   right: 8px;
+}
+
+#mapModal {
+  display: grid;
+  grid-template-columns: repeat(61, 12px);
+  grid-gap: 0px;
+  position: fixed;
+  width: 732px;
+  height: 732px;
+  top: 10px;
+  left: 50%;
+  padding: 2px;
+  transform: translateX(-50%) rotate(-90deg);
+  background-color: #424040;
+  border: 1px solid #000;
+}
+
+#mapModal .cell {
+  height: 12px;
+  width: 12px;
+  display: inline-block;
+
+  color: white;
+  font-size: 10px;
+  transform: rotate(90deg);
+  line-height: 6px;
+  transform-origin: center center;
+  text-align: center;
 }

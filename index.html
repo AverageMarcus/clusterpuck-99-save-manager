@@ -91,10 +91,16 @@
               </div>
 
               <button @click="exportLevel(level.levelID)">Export</button>
+
+              <button @click="showMap(level.levelData, level.backgroundColour)">Preview</button>
             </div>
           </div>
         </div>
       </main>
+
+      <div id="mapModal" v-show="mapShown" @click="hideMap">
+
+      </div>
     </div>
   </body>
 </html>
